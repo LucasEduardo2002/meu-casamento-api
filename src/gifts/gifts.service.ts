@@ -102,7 +102,7 @@ export class GiftsService implements OnModuleInit {
         name: 'Gelagua ou Bebedouro',
         description: 'Gelagua para termos água gelada sempre à disposição.',
         price: 450.00,
-        image_url: '/src/assets/gelagua.png',
+        image_url: '/gelagua.png',
       },
       {
         name: 'Ventilador de Coluna',
