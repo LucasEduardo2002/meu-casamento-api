@@ -22,7 +22,7 @@ import { GiftsModule } from './gifts/gifts.module';
         database: configService.get<string>('DB_DATABASE', 'meucasamento'),
         autoLoadEntities: true,
         synchronize: true,
-        ssl: configService.get<string>('DB_SSL') === 'true'
+        ssl: configService.get<string>('DB_SSL') === 'true' || configService.get<string>('DB_HOST', '').includes('neon.tech')
           ? { rejectUnauthorized: false }
           : false,
       }),
