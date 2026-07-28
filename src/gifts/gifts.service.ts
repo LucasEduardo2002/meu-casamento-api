@@ -82,12 +82,6 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/batedeira.webp',
       },
       {
-        name: 'Aspirador de Pó Vertical',
-        description: 'Aspirador vertical para limpeza prática.',
-        price: 170.00,
-        image_url: '/Lista-presentes/aspirador_de_po.webp',
-      },
-      {
         name: 'Micro-ondas 220v',
         description: 'Micro-ondas para aquecer as refeições.',
         price: 580.00,
@@ -202,12 +196,6 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/toalhas_mesa.png',
       },
       {
-        name: 'Conjunto de Panos de Prato',
-        description: 'Panos de prato para cozinha.',
-        price: 50.00,
-        image_url: 'https://plus.unsplash.com/premium_photo-1750041545838-f2ef7b41599a?q=80&w=300&auto=format&fit=crop',
-      },
-      {
         name: 'Lixeira de Inox (Cozinha/Banheiro)',
         description: 'Lixeira de inox com pedal.',
         price: 90.00,
@@ -232,12 +220,6 @@ export class GiftsService implements OnModuleInit {
         image_url: 'https://images.unsplash.com/photo-1605280179505-db8b72e318b7?q=80&w=300&auto=format&fit=crop',
       },
       {
-        name: 'Manta Decorativa para Sofá',
-        description: 'Manta decorativa para sofá.',
-        price: 95.00,
-        image_url: 'https://plus.unsplash.com/premium_photo-1678375722586-b5eef2972f4f?q=80&w=300&auto=format&fit=crop',
-      },
-      {
         name: 'Mesa de Centro de Sala',
         description: 'Mesa de centro para sala.',
         price: 250.00,
@@ -251,14 +233,22 @@ export class GiftsService implements OnModuleInit {
       }
     ];
 
-    // Delete 'Lixeira Grande para Cozinha' if it exists and is available
+    // Delete removed items if they exist and are available
     try {
-      const toDelete = await this.giftsRepository.findOneBy({ name: 'Lixeira Grande para Cozinha', status: 'available' });
-      if (toDelete) {
-        await this.giftsRepository.remove(toDelete);
+      const itemsToDelete = [
+        'Lixeira Grande para Cozinha',
+        'Conjunto de Panos de Prato',
+        'Manta Decorativa para Sofá',
+        'Aspirador de Pó Vertical'
+      ];
+      for (const itemName of itemsToDelete) {
+        const toDelete = await this.giftsRepository.findOneBy({ name: itemName, status: 'available' });
+        if (toDelete) {
+          await this.giftsRepository.remove(toDelete);
+        }
       }
     } catch (e) {
-      console.warn('Erro ao tentar remover lixeira excluída:', e.message);
+      console.warn('Erro ao tentar remover itens excluídos:', e.message);
     }
 
     for (const giftDto of defaultGifts) {
