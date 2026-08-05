@@ -296,6 +296,48 @@ export class GiftsService implements OnModuleInit {
         description: 'Espelho retangular grande para corpo inteiro com moldura discreta.',
         price: 100.00,
         image_url: '/Lista-presentes/espelho_corpo_inteiro.png',
+      },
+      {
+        name: 'Frigideira Cerâmica Antiaderente',
+        description: 'Frigideira com revestimento cerâmico antiaderente para grelhar com facilidade.',
+        price: 80.00,
+        image_url: '/Lista-presentes/frigideira_ceramica.png',
+      },
+      {
+        name: 'Relógio De Parede 30cm Grande',
+        description: 'Relógio de parede moderno e silencioso de 30cm para decoração da casa.',
+        price: 60.00,
+        image_url: '/Lista-presentes/relogio_parede.png',
+      },
+      {
+        name: 'Organizador Giratório de Temperos 360°',
+        description: 'Organizador giratório 360 graus para temperos e condimentos na cozinha.',
+        price: 70.00,
+        image_url: '/Lista-presentes/organizador_temperos.png',
+      },
+      {
+        name: 'Kit Bowls Tigelas de Inox com Tampa Plástica, 3 Unidades',
+        description: 'Conjunto com 3 tigelas de aço inox com tampas plásticas para conservar alimentos.',
+        price: 100.00,
+        image_url: '/Lista-presentes/kit_bowls_inox.png',
+      },
+      {
+        name: 'Pipoqueira 220V',
+        description: 'Pipoqueira elétrica 220V para fazer pipoca crocante e saudável sem óleo.',
+        price: 150.00,
+        image_url: '/Lista-presentes/pipoqueira_eletrica.png',
+      },
+      {
+        name: 'Multiprocessador 220v',
+        description: 'Multiprocessador potente de alimentos 220V para triturar, fatiar e ralar.',
+        price: 300.00,
+        image_url: '/Lista-presentes/multiprocessador.png',
+      },
+      {
+        name: 'operação lua de mel',
+        description: 'Ajude os noivos a curtirem a lua de mel com qualquer valor ou cotas.',
+        price: 100.00,
+        image_url: '/Lista-presentes/operacao_lua_de_mel.png',
       }
     ];
 
