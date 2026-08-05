@@ -305,7 +305,18 @@ export class GiftsService implements OnModuleInit {
         'Lixeira Grande para Cozinha',
         'Conjunto de Panos de Prato',
         'Manta Decorativa para Sofá',
-        'Aspirador de Pó Vertical'
+        'Aspirador de Pó Vertical',
+        'Panela de Pressão Elétrica',
+        'Kit 6 Jogo Americano Redondo (Sousplat)',
+        'Jogo com 6 Taças de Sobremesa Diamante',
+        'Luminária de Mesa (Abajur)',
+        'Mop Giratório com Cesto Inox',
+        'Kit 3 Formas para Bolo e Torta Antiaderente',
+        'Kit Jarra e Copos de Vidro',
+        'Kit 2 Mantas para Sofá',
+        'Kit de Mantas para Sofá (2 unidades)',
+        'Kit 10 Potes de Vidro Herméticos',
+        'Espelho 90x40cm (Corpo Inteiro)'
       ];
       for (const itemName of itemsToDelete) {
         const toDelete = await this.giftsRepository.findOneBy({ name: itemName, status: 'available' });
