@@ -5,6 +5,55 @@ import { Gift } from './entities/gift.entity';
 import { CreateGiftDto } from './dto/create-gift.dto';
 import { ClaimGiftDto } from './dto/claim-gift.dto';
 
+const GIFT_LIMITS: Record<string, number | 'unlimited'> = {
+  'Jogo de Panelas de Cerâmica': 'unlimited',
+  'Sanduicheira 220v': 2,
+  'Airfryer 220v': 2,
+  'Liquidificador 220v': 2,
+  'Garrafa Térmica de Café': 2,
+  'Faqueiro Inox': 2,
+  'Conjunto de Taças': 2,
+  'Ventilador de Coluna': 3,
+  'Conjunto de Copos': 3,
+  'Conjunto de Potes para Mantimentos': 3,
+  'Boleira de Vidro': 'unlimited',
+  'Conjunto de Talheres de Sobremesa': 3,
+  'Jogo de Lençol de Algodão Queen': 3,
+  'Edredom Queen Cobre-Leito': 3,
+  'Kit de Travesseiros Confort': 3,
+  'Protetor de Colchão Impermeável': 'unlimited',
+  'Jogo de Toalhas de Banho': 3,
+  'Toalhas de Mesa e Jogo Americano': 2,
+  'Panela de Pressão Cerâmica': 'unlimited',
+  'Panela de pressão elétrica': 'unlimited',
+  'Jogo Com 6 Taças De Sobremesa Diamante': 2,
+  'Kit 3 Formas Para Bolo Torta Antiaderente': 2,
+  'Kit Jarra de Vidro e Copos De Vidro': 2,
+  'Frigideira Cerâmica Antiaderente': 'unlimited',
+  'Kit 2 Mantas Para Sofá': 2,
+  'operação lua de mel': 'unlimited',
+};
+
+function isUnlimited(name: string): boolean {
+  const norm = name.trim().toLowerCase();
+  for (const [key, val] of Object.entries(GIFT_LIMITS)) {
+    if (key.trim().toLowerCase() === norm && val === 'unlimited') {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getLimit(name: string): number {
+  const norm = name.trim().toLowerCase();
+  for (const [key, val] of Object.entries(GIFT_LIMITS)) {
+    if (key.trim().toLowerCase() === norm) {
+      return val === 'unlimited' ? 1 : val;
+    }
+  }
+  return 1;
+}
+
 @Injectable()
 export class GiftsService implements OnModuleInit {
   constructor(
@@ -16,14 +65,18 @@ export class GiftsService implements OnModuleInit {
     // Rename old items to keep consistency without duplicating
     try {
       const renames = [
-        { old: 'Airfryer (Fritadeira Elétrica Premium)', new: 'Airfryer' },
+        { old: 'Airfryer (Fritadeira Elétrica Premium)', new: 'Airfryer 220v' },
+        { old: 'Airfryer', new: 'Airfryer 220v' },
         { old: 'Forno Micro-ondas Espelhado', new: 'Micro-ondas 220v' },
         { old: 'Gela-água ou Bebedouro', new: 'Gelagua ou Bebedouro' },
-        { old: 'Secador de Louça', new: 'Escorredor de louça' }
+        { old: 'Secador de Louça', new: 'Escorredor de louça' },
+        { old: 'Liquidificador ou Processador de Alimentos', new: 'Liquidificador 220v' },
+        { old: 'Liquidificador', new: 'Liquidificador 220v' },
+        { old: 'Sanduicheira', new: 'Sanduicheira 220v' }
       ];
       for (const rename of renames) {
-        const oldGift = await this.giftsRepository.findOneBy({ name: rename.old });
-        if (oldGift) {
+        const oldGifts = await this.giftsRepository.findBy({ name: rename.old });
+        for (const oldGift of oldGifts) {
           oldGift.name = rename.new;
           await this.giftsRepository.save(oldGift);
         }
@@ -46,13 +99,13 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/aparelho-de-jantar.webp',
       },
       {
-        name: 'Airfryer',
+        name: 'Airfryer 220v',
         description: 'Fritadeira elétrica para preparar alimentos com rapidez.',
         price: 400.00,
         image_url: '/Lista-presentes/air-frayer.webp',
       },
       {
-        name: 'Liquidificador ou Processador de Alimentos',
+        name: 'Liquidificador 220v',
         description: 'Para preparar sucos, vitaminas e receitas.',
         price: 100.00,
         image_url: '/Lista-presentes/liquidificador.webp',
@@ -88,7 +141,7 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/microondas.png',
       },
       {
-        name: 'Sanduicheira',
+        name: 'Sanduicheira 220v',
         description: 'Sanduicheira para fazer lanches.',
         price: 80.00,
         image_url: '/Lista-presentes/sanduicheira.png',
@@ -311,7 +364,7 @@ export class GiftsService implements OnModuleInit {
       },
       {
         name: 'Organizador Giratório de Temperos 360°',
-        description: 'Organizador giratório 360 graus para temperos e condimentos na cozinha.',
+        description: 'Organizador giratório 360 graus para temperos and condimentos na cozinha.',
         price: 70.00,
         image_url: '/Lista-presentes/organizador_temperos.png',
       },
@@ -371,14 +424,22 @@ export class GiftsService implements OnModuleInit {
     }
 
     for (const giftDto of defaultGifts) {
-      const exists = await this.giftsRepository.findOneBy({ name: giftDto.name });
-      if (!exists) {
-        await this.create(giftDto);
+      const targetLimit = getLimit(giftDto.name);
+      const currentCount = await this.giftsRepository.countBy({ name: giftDto.name });
+      
+      if (currentCount < targetLimit) {
+        const needed = targetLimit - currentCount;
+        for (let i = 0; i < needed; i++) {
+          await this.create(giftDto);
+        }
       } else {
-        exists.description = giftDto.description || '';
-        exists.price = giftDto.price;
-        exists.image_url = giftDto.image_url || '';
-        await this.giftsRepository.save(exists);
+        const existingGifts = await this.giftsRepository.findBy({ name: giftDto.name });
+        for (const exists of existingGifts) {
+          exists.description = giftDto.description || '';
+          exists.price = giftDto.price;
+          exists.image_url = giftDto.image_url || '';
+          await this.giftsRepository.save(exists);
+        }
       }
     }
     console.log('Carga de presentes semeada/verificada com sucesso!');
@@ -411,7 +472,19 @@ export class GiftsService implements OnModuleInit {
     gift.status = 'claimed';
     gift.claimed_at = new Date();
 
-    return await this.giftsRepository.save(gift);
+    const savedGift = await this.giftsRepository.save(gift);
+
+    // Se for ilimitado, cria outro disponível automaticamente
+    if (isUnlimited(gift.name)) {
+      await this.create({
+        name: gift.name,
+        description: gift.description,
+        price: gift.price,
+        image_url: gift.image_url,
+      });
+    }
+
+    return savedGift;
   }
 
   async confirm(id: number): Promise<Gift> {
