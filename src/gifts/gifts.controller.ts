@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, ParseIntPipe, Patch } from '@nestjs/common';
 import { GiftsService } from './gifts.service';
 import { CreateGiftDto } from './dto/create-gift.dto';
 import { ClaimGiftDto } from './dto/claim-gift.dto';
@@ -33,5 +33,13 @@ export class GiftsController {
   @Post(':id/unclaim')
   unclaim(@Param('id', ParseIntPipe) id: number) {
     return this.giftsService.unclaim(id);
+  }
+
+  @Patch(':id/quantity')
+  updateQuantity(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('available_quantity', ParseIntPipe) quantity: number,
+  ) {
+    return this.giftsService.updateQuantity(id, quantity);
   }
 }

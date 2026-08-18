@@ -429,23 +429,51 @@ export class GiftsService implements OnModuleInit {
       console.warn('Erro ao tentar remover itens excluídos:', e.message);
     }
 
+    // Merge duplicates to the new schema:
+    try {
+      const allAvailable = await this.giftsRepository.findBy({ status: 'available' });
+      const grouped: Record<string, Gift[]> = {};
+      for (const gift of allAvailable) {
+        if (!grouped[gift.name]) {
+          grouped[gift.name] = [];
+        }
+        grouped[gift.name].push(gift);
+      }
+
+      for (const [name, items] of Object.entries(grouped)) {
+        if (items.length > 1) {
+          const keep = items[0];
+          keep.available_quantity = isUnlimited(name) ? -1 : items.length;
+          await this.giftsRepository.save(keep);
+
+          for (let i = 1; i < items.length; i++) {
+            await this.giftsRepository.remove(items[i]);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Erro ao migrar duplicados:', e.message);
+    }
+
     for (const giftDto of defaultGifts) {
-      const targetLimit = getLimit(giftDto.name);
-      const currentCount = await this.giftsRepository.countBy({ name: giftDto.name });
+      let existingAvailable = await this.giftsRepository.findOneBy({ name: giftDto.name, status: 'available' });
       
-      if (currentCount < targetLimit) {
-        const needed = targetLimit - currentCount;
-        for (let i = 0; i < needed; i++) {
-          await this.create(giftDto);
-        }
+      if (!existingAvailable) {
+        const qty = isUnlimited(giftDto.name) ? -1 : 0;
+        existingAvailable = this.giftsRepository.create({
+          ...giftDto,
+          available_quantity: qty,
+          status: 'available',
+        });
+        await this.giftsRepository.save(existingAvailable);
       } else {
-        const existingGifts = await this.giftsRepository.findBy({ name: giftDto.name });
-        for (const exists of existingGifts) {
-          exists.description = giftDto.description || '';
-          exists.price = giftDto.price;
-          exists.image_url = giftDto.image_url || '';
-          await this.giftsRepository.save(exists);
+        existingAvailable.description = giftDto.description || '';
+        existingAvailable.price = giftDto.price;
+        existingAvailable.image_url = giftDto.image_url || '';
+        if (existingAvailable.available_quantity === undefined || existingAvailable.available_quantity === null) {
+          existingAvailable.available_quantity = isUnlimited(giftDto.name) ? -1 : getLimit(giftDto.name);
         }
+        await this.giftsRepository.save(existingAvailable);
       }
     }
     console.log('Carga de presentes semeada/verificada com sucesso!');
@@ -472,25 +500,32 @@ export class GiftsService implements OnModuleInit {
       throw new BadRequestException(`Presente já reservado ou confirmado`);
     }
 
-    gift.buyer_name = claimGiftDto.buyer_name;
-    gift.buyer_phone = claimGiftDto.buyer_phone;
-    gift.payment_method = claimGiftDto.payment_method;
-    gift.status = 'claimed';
-    gift.claimed_at = new Date();
-
-    const savedGift = await this.giftsRepository.save(gift);
-
-    // Se for ilimitado, cria outro disponível automaticamente
-    if (isUnlimited(gift.name)) {
-      await this.create({
-        name: gift.name,
-        description: gift.description,
-        price: gift.price,
-        image_url: gift.image_url,
-      });
+    if (gift.available_quantity === 0) {
+      throw new BadRequestException(`Presente esgotado ou indisponível`);
     }
 
-    return savedGift;
+    // Create a new claimed record to represent the guest's reservation
+    const claimedGift = this.giftsRepository.create({
+      name: gift.name,
+      description: gift.description,
+      price: gift.price,
+      image_url: gift.image_url,
+      status: 'claimed',
+      buyer_name: claimGiftDto.buyer_name,
+      buyer_phone: claimGiftDto.buyer_phone,
+      payment_method: claimGiftDto.payment_method,
+      claimed_at: new Date(),
+      available_quantity: 0,
+    });
+    const savedClaim = await this.giftsRepository.save(claimedGift);
+
+    // Decrement quantity of the available row (if not unlimited)
+    if (gift.available_quantity !== -1) {
+      gift.available_quantity = Math.max(0, gift.available_quantity - 1);
+      await this.giftsRepository.save(gift);
+    }
+
+    return savedClaim;
   }
 
   async confirm(id: number): Promise<Gift> {
@@ -509,22 +544,31 @@ export class GiftsService implements OnModuleInit {
       throw new NotFoundException(`Presente com ID ${id} não encontrado`);
     }
 
-    if (isUnlimited(gift.name)) {
-      const extraAvailable = await this.giftsRepository.findOneBy({
-        name: gift.name,
-        status: 'available',
-      });
-      if (extraAvailable) {
-        await this.giftsRepository.remove(extraAvailable);
+    if (gift.status === 'available') {
+      throw new BadRequestException(`Este presente já está disponível`);
+    }
+
+    // Delete the claimed/confirmed row
+    await this.giftsRepository.remove(gift);
+
+    // Find the available row for this gift name to restore stock
+    const availableGift = await this.giftsRepository.findOneBy({ name: gift.name, status: 'available' });
+    if (availableGift) {
+      if (availableGift.available_quantity !== -1) {
+        availableGift.available_quantity += 1;
+        await this.giftsRepository.save(availableGift);
       }
     }
 
-    gift.buyer_name = null;
-    gift.buyer_phone = null;
-    gift.payment_method = null;
-    gift.status = 'available';
-    gift.claimed_at = null;
+    return gift;
+  }
 
+  async updateQuantity(id: number, quantity: number): Promise<Gift> {
+    const gift = await this.giftsRepository.findOneBy({ id });
+    if (!gift) {
+      throw new NotFoundException(`Presente com ID ${id} não encontrado`);
+    }
+    gift.available_quantity = quantity;
     return await this.giftsRepository.save(gift);
   }
 }

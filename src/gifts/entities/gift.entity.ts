@@ -39,4 +39,7 @@ export class Gift {
 
   @Column({ type: 'timestamp', nullable: true })
   claimed_at: Date | null;
+
+  @Column({ type: 'integer', default: 1 })
+  available_quantity: number;
 }
