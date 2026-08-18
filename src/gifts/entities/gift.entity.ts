@@ -24,10 +24,10 @@ export class Gift {
   })
   status: 'available' | 'claimed' | 'confirmed';
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   buyer_name: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   buyer_phone: string | null;
 
   @Column({
