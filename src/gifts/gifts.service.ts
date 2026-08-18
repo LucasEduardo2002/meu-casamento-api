@@ -502,5 +502,30 @@ export class GiftsService implements OnModuleInit {
     gift.status = 'confirmed';
     return await this.giftsRepository.save(gift);
   }
+
+  async unclaim(id: number): Promise<Gift> {
+    const gift = await this.giftsRepository.findOneBy({ id });
+    if (!gift) {
+      throw new NotFoundException(`Presente com ID ${id} não encontrado`);
+    }
+
+    if (isUnlimited(gift.name)) {
+      const extraAvailable = await this.giftsRepository.findOneBy({
+        name: gift.name,
+        status: 'available',
+      });
+      if (extraAvailable) {
+        await this.giftsRepository.remove(extraAvailable);
+      }
+    }
+
+    gift.buyer_name = null;
+    gift.buyer_phone = null;
+    gift.payment_method = null;
+    gift.status = 'available';
+    gift.claimed_at = null;
+
+    return await this.giftsRepository.save(gift);
+  }
 }
 

@@ -29,4 +29,9 @@ export class GiftsController {
   confirm(@Param('id', ParseIntPipe) id: number) {
     return this.giftsService.confirm(id);
   }
+
+  @Post(':id/unclaim')
+  unclaim(@Param('id', ParseIntPipe) id: number) {
+    return this.giftsService.unclaim(id);
+  }
 }

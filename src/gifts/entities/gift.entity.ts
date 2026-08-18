@@ -25,18 +25,18 @@ export class Gift {
   status: 'available' | 'claimed' | 'confirmed';
 
   @Column({ nullable: true })
-  buyer_name: string;
+  buyer_name: string | null;
 
   @Column({ nullable: true })
-  buyer_phone: string;
+  buyer_phone: string | null;
 
   @Column({
     type: 'enum',
     enum: ['pix', 'external_purchase'],
     nullable: true,
   })
-  payment_method: 'pix' | 'external_purchase';
+  payment_method: 'pix' | 'external_purchase' | null;
 
   @Column({ type: 'timestamp', nullable: true })
-  claimed_at: Date;
+  claimed_at: Date | null;
 }
