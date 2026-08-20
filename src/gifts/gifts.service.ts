@@ -7,6 +7,7 @@ import { ClaimGiftDto } from './dto/claim-gift.dto';
 
 const GIFT_LIMITS: Record<string, number | 'unlimited'> = {
   'Jogo de Panelas de Cerâmica': 'unlimited',
+  'Aspirador de Pó Vertical 220v': 1,
   'Sanduicheira 220v': 2,
   'Airfryer 220v': 2,
   'Liquidificador 220v': 2,
@@ -394,7 +395,7 @@ export class GiftsService implements OnModuleInit {
       },
       {
         name: 'Aspirador de Pó Vertical 220v',
-        description: 'Aspirador Electrolux STK14 2 em 1 de 1450W com filtro HEPA.',
+        description: 'Aspirador 2 em 1 de 1450W com filtro HEPA.',
         price: 190.00,
         image_url: '/Lista-presentes/aspirador-vertical.png',
       },
