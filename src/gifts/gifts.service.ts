@@ -393,6 +393,12 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/ferro_seco.png',
       },
       {
+        name: 'Aspirador de Pó Vertical 220v',
+        description: 'Aspirador Electrolux STK14 2 em 1 de 1450W com filtro HEPA.',
+        price: 190.00,
+        image_url: '/Lista-presentes/aspirador-vertical.png',
+      },
+      {
         name: 'operação lua de mel',
         description: 'Ajude os noivos a curtirem a lua de mel com qualquer valor ou cotas.',
         price: 100.00,
