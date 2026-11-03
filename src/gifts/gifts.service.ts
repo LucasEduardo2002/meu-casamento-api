@@ -11,7 +11,6 @@ const GIFT_LIMITS: Record<string, number | 'unlimited'> = {
   'Sanduicheira 220v': 2,
   'Airfryer 220v': 2,
   'Liquidificador 220v': 2,
-  'Garrafa Térmica de Café': 2,
   'Faqueiro Inox': 2,
   'Conjunto de Taças': 2,
   'Ventilador de Coluna': 3,
@@ -60,7 +59,7 @@ export class GiftsService implements OnModuleInit {
   constructor(
     @InjectRepository(Gift)
     private giftsRepository: Repository<Gift>,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     // Rename old items to keep consistency without duplicating
@@ -124,12 +123,6 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/talheres.jpg',
       },
       {
-        name: 'Garrafa Térmica de Café',
-        description: 'Garrafa térmica para café ou chá.',
-        price: 60.00,
-        image_url: '/Lista-presentes/garrafa_de_cafe.png',
-      },
-      {
         name: 'Batedeira Planetária',
         description: 'Batedeira para auxiliar no preparo de receitas.',
         price: 350.00,
@@ -176,18 +169,6 @@ export class GiftsService implements OnModuleInit {
         description: 'Conjunto de potes organizadores.',
         price: 120.00,
         image_url: '/Lista-presentes/potes_mantimento.png',
-      },
-      {
-        name: 'Kit de Utensílios de Silicone',
-        description: 'Utensílios de silicone para cozinha.',
-        price: 95.00,
-        image_url: '/Lista-presentes/utensilios_cozinha.png',
-      },
-      {
-        name: 'Tábua de Corte de Bambu',
-        description: 'Tábua de corte em bambu.',
-        price: 70.00,
-        image_url: '/Lista-presentes/tabua_bambu.png',
       },
       {
         name: 'Kit para Churrasco',
@@ -464,7 +445,7 @@ export class GiftsService implements OnModuleInit {
 
     for (const giftDto of defaultGifts) {
       let existingAvailable = await this.giftsRepository.findOneBy({ name: giftDto.name, status: 'available' });
-      
+
       if (!existingAvailable) {
         const qty = isUnlimited(giftDto.name) ? -1 : 0;
         existingAvailable = this.giftsRepository.create({
