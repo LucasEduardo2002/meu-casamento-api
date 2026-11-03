@@ -388,7 +388,7 @@ export class GiftsService implements OnModuleInit {
       }
     ];
 
-    // Delete removed items if they exist and are available
+    // Delete removed items if they exist
     try {
       const itemsToDelete = [
         'Lixeira Grande para Cozinha',
@@ -405,12 +405,34 @@ export class GiftsService implements OnModuleInit {
         'Kit 2 Mantas para Sofá',
         'Kit de Mantas para Sofá (2 unidades)',
         'Kit 10 Potes de Vidro Herméticos',
-        'Espelho 90x40cm (Corpo Inteiro)'
+        'Espelho 90x40cm (Corpo Inteiro)',
+        'Garrafa Térmica de Café',
+        'garrafa térmica de café',
+        'Garrafa Térmica',
+        'Kit de Utensílios de Silicone',
+        'Utensílios de Silicone',
+        'utensílios de silicone',
+        'Tábua de Corte de Bambu',
+        'Tábua de Carne',
+        'tábua de carne',
+        'Tábua de Corte'
       ];
       for (const itemName of itemsToDelete) {
-        const toDelete = await this.giftsRepository.findOneBy({ name: itemName, status: 'available' });
-        if (toDelete) {
-          await this.giftsRepository.remove(toDelete);
+        const toDeleteList = await this.giftsRepository.findBy({ name: itemName });
+        if (toDeleteList && toDeleteList.length > 0) {
+          await this.giftsRepository.remove(toDeleteList);
+        }
+      }
+
+      // Normalized safety check to remove any variations of the removed items
+      const allGifts = await this.giftsRepository.find();
+      for (const g of allGifts) {
+        const norm = (g.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        const isGarrafa = norm.includes('garrafa') && norm.includes('termica');
+        const isSilicone = norm.includes('silicone');
+        const isTabuaCarne = norm.includes('tabua') && (norm.includes('carne') || norm.includes('corte') || norm.includes('bambu'));
+        if (isGarrafa || isSilicone || isTabuaCarne) {
+          await this.giftsRepository.remove(g);
         }
       }
     } catch (e) {
@@ -468,8 +490,15 @@ export class GiftsService implements OnModuleInit {
   }
 
   async findAll(): Promise<Gift[]> {
-    return await this.giftsRepository.find({
+    const gifts = await this.giftsRepository.find({
       order: { price: 'ASC' },
+    });
+    return gifts.filter(g => {
+      const norm = (g.name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+      const isGarrafa = norm.includes('garrafa') && norm.includes('termica');
+      const isSilicone = norm.includes('silicone');
+      const isTabuaCarne = norm.includes('tabua') && (norm.includes('carne') || norm.includes('corte') || norm.includes('bambu'));
+      return !isGarrafa && !isSilicone && !isTabuaCarne;
     });
   }
 
