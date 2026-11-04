@@ -5,31 +5,31 @@ export class Guest {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   name: string;
 
-  @Column({ nullable: true, default: '' })
+  @Column({ type: 'varchar', nullable: true, default: '' })
   firstname: string;
 
-  @Column({ nullable: true, default: '' })
+  @Column({ type: 'varchar', nullable: true, default: '' })
   lastname: string;
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   confirmed_presence: boolean;
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   has_absentees: boolean;
 
   @Column({ type: 'text', nullable: true })
   absent_names: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   email: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   phone: string | null;
 
-  @Column({ default: 1 })
+  @Column({ type: 'int', default: 1 })
   guest_count: number;
 
   @Column({ type: 'text', nullable: true })
