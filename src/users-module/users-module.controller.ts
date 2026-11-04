@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { UsersModuleService } from './users-module.service';
 import { CreateUsersModuleDto } from './dto/create-users-module.dto';
 import { UpdateUsersModuleDto } from './dto/update-users-module.dto';
+import { ConfirmRsvpDto } from './dto/confirm-rsvp.dto';
 
 @Controller('users-module')
 export class UsersModuleController {
@@ -18,17 +19,33 @@ export class UsersModuleController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersModuleService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersModuleService.findOne(id);
+  }
+
+  @Post(':id/confirm')
+  confirm(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() confirmRsvpDto: ConfirmRsvpDto,
+  ) {
+    return this.usersModuleService.confirm(id, confirmRsvpDto);
+  }
+
+  @Post(':id/reset')
+  reset(@Param('id', ParseIntPipe) id: number) {
+    return this.usersModuleService.reset(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsersModuleDto: UpdateUsersModuleDto) {
-    return this.usersModuleService.update(+id, updateUsersModuleDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUsersModuleDto: UpdateUsersModuleDto,
+  ) {
+    return this.usersModuleService.update(id, updateUsersModuleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersModuleService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.usersModuleService.remove(id);
   }
 }
