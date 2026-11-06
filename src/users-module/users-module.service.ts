@@ -66,12 +66,13 @@ export const DEFAULT_GUESTS = [
   'Moisés',
   'Pedro e Gabriela',
   'Bruno e Sheila',
-  'Irene Macedo',
+  'Tia Nilda',
   'Antônio Girorme',
   'Jaiane e José Carlos',
   'Tia Luciana',
   'Tia Graça',
   'Tio Valderi e Lourdes',
+  'Tia Socorro e Danielle',
 ];
 
 @Injectable()
@@ -83,6 +84,20 @@ export class UsersModuleService implements OnModuleInit {
 
   async onModuleInit() {
     try {
+      // Rename old entries to maintain consistency
+      const oldIrene = await this.guestsRepository.findBy({ name: 'Irene Macedo' });
+      for (const g of oldIrene) {
+        g.name = 'Tia Nilda';
+        g.firstname = 'Tia Nilda';
+        await this.guestsRepository.save(g);
+      }
+      const oldIreneFirstname = await this.guestsRepository.findBy({ firstname: 'Irene Macedo' });
+      for (const g of oldIreneFirstname) {
+        g.name = 'Tia Nilda';
+        g.firstname = 'Tia Nilda';
+        await this.guestsRepository.save(g);
+      }
+
       for (const guestName of DEFAULT_GUESTS) {
         let guest = await this.guestsRepository.findOne({
           where: [{ name: guestName }, { firstname: guestName }],
