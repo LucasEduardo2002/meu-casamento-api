@@ -73,6 +73,7 @@ export const DEFAULT_GUESTS = [
   'Tia Graça',
   'Tio Valderi e Lourdes',
   'Tia Socorro e Danielle',
+  'Márcia e Zé',
 ];
 
 @Injectable()
