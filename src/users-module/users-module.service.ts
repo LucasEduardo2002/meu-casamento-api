@@ -38,7 +38,7 @@ export const DEFAULT_GUESTS = [
   'Surama e Evânio',
   'Anna Júlia e Eliabe',
   'Anny e Cláudio',
-  'Juciene',
+  'Juciene e Meirinho',
   'Gisele e Renan',
   'Eduarda e Jadyel',
   'Do Carmo e Geraldo',
@@ -96,6 +96,19 @@ export class UsersModuleService implements OnModuleInit {
       for (const g of oldIreneFirstname) {
         g.name = 'Tia Nilda';
         g.firstname = 'Tia Nilda';
+        await this.guestsRepository.save(g);
+      }
+
+      const oldJuciene = await this.guestsRepository.findBy({ name: 'Juciene' });
+      for (const g of oldJuciene) {
+        g.name = 'Juciene e Meirinho';
+        g.firstname = 'Juciene e Meirinho';
+        await this.guestsRepository.save(g);
+      }
+      const oldJucieneFirstname = await this.guestsRepository.findBy({ firstname: 'Juciene' });
+      for (const g of oldJucieneFirstname) {
+        g.name = 'Juciene e Meirinho';
+        g.firstname = 'Juciene e Meirinho';
         await this.guestsRepository.save(g);
       }
 
