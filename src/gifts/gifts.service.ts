@@ -73,7 +73,8 @@ export class GiftsService implements OnModuleInit {
         { old: 'Liquidificador ou Processador de Alimentos', new: 'Liquidificador 220v' },
         { old: 'Liquidificador', new: 'Liquidificador 220v' },
         { old: 'Sanduicheira', new: 'Sanduicheira 220v' },
-        { old: 'Organizador Giratório de Temperos 360°', new: 'Porta Temperos Giratório 360°' }
+        { old: 'Organizador Giratório de Temperos 360°', new: 'Porta Temperos Giratório 360°' },
+        { old: 'Jogo de Assadeiras e Travessas', new: 'Jogo Assadeiras 3 Peças Antiaderente' }
       ];
       for (const rename of renames) {
         const oldGifts = await this.giftsRepository.findBy({ name: rename.old });
@@ -160,9 +161,9 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/conjunto_copos.png',
       },
       {
-        name: 'Jogo de Assadeiras e Travessas',
-        description: 'Travessas de vidro para assar e servir.',
-        price: 189.00,
+        name: 'Jogo Assadeiras 3 Peças Antiaderente',
+        description: '',
+        price: 160.00,
         image_url: '/Lista-presentes/assadeira.png',
       },
       {
