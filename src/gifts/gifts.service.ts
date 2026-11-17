@@ -27,7 +27,6 @@ const GIFT_LIMITS: Record<string, number | 'unlimited'> = {
   'Panela de Pressão Cerâmica': 'unlimited',
   'Panela de pressão elétrica': 'unlimited',
   'Jogo Com 6 Taças De Sobremesa Diamante': 2,
-  'Kit 3 Formas Para Bolo Torta Antiaderente': 2,
   'Kit Jarra de Vidro e Copos De Vidro': 2,
   'Frigideira Cerâmica Antiaderente': 'unlimited',
   'Kit 2 Mantas Para Sofá': 2,
@@ -305,12 +304,6 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/mop_giratorio_inox.png',
       },
       {
-        name: 'Kit 3 Formas Para Bolo Torta Antiaderente',
-        description: 'Conjunto com 3 formas antiaderentes de tamanhos variados para bolo e torta.',
-        price: 70.00,
-        image_url: '/Lista-presentes/formas_bolo_antiaderente.png',
-      },
-      {
         name: 'Kit Jarra de Vidro e Copos De Vidro',
         description: 'Jogo com jarra e copos de vidro trabalhados para servir bebidas.',
         price: 136.50,
@@ -403,6 +396,7 @@ export class GiftsService implements OnModuleInit {
         'Luminária de Mesa (Abajur)',
         'Mop Giratório com Cesto Inox',
         'Kit 3 Formas para Bolo e Torta Antiaderente',
+        'Kit 3 Formas Para Bolo Torta Antiaderente',
         'Kit Jarra e Copos de Vidro',
         'Kit 2 Mantas para Sofá',
         'Kit de Mantas para Sofá (2 unidades)',
@@ -433,7 +427,8 @@ export class GiftsService implements OnModuleInit {
         const isGarrafa = norm.includes('garrafa') && norm.includes('termica');
         const isSilicone = norm.includes('silicone');
         const isTabuaCarne = norm.includes('tabua') && (norm.includes('carne') || norm.includes('corte') || norm.includes('bambu'));
-        if (isGarrafa || isSilicone || isTabuaCarne) {
+        const isFormas = norm.includes('formas') && (norm.includes('bolo') || norm.includes('torta'));
+        if (isGarrafa || isSilicone || isTabuaCarne || isFormas) {
           await this.giftsRepository.remove(g);
         }
       }
@@ -500,7 +495,8 @@ export class GiftsService implements OnModuleInit {
       const isGarrafa = norm.includes('garrafa') && norm.includes('termica');
       const isSilicone = norm.includes('silicone');
       const isTabuaCarne = norm.includes('tabua') && (norm.includes('carne') || norm.includes('corte') || norm.includes('bambu'));
-      return !isGarrafa && !isSilicone && !isTabuaCarne;
+      const isFormas = norm.includes('formas') && (norm.includes('bolo') || norm.includes('torta'));
+      return !isGarrafa && !isSilicone && !isTabuaCarne && !isFormas;
     });
   }
 
