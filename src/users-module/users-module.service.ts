@@ -75,6 +75,7 @@ export const DEFAULT_GUESTS = [
   'Tia Socorro e família',
   'Márcia e Zé',
   'Milena Araújo',
+  'Tia Gorete',
 ];
 
 @Injectable()
