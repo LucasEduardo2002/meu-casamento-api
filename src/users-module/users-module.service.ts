@@ -72,8 +72,9 @@ export const DEFAULT_GUESTS = [
   'Tia Luciana',
   'Tia Graça',
   'Tio Valderi e Lourdes',
-  'Tia Socorro e Danielle',
+  'Tia Socorro e família',
   'Márcia e Zé',
+  'Milena Araújo',
 ];
 
 @Injectable()
@@ -109,6 +110,20 @@ export class UsersModuleService implements OnModuleInit {
       for (const g of oldJucieneFirstname) {
         g.name = 'Juciene e Meirinho';
         g.firstname = 'Juciene e Meirinho';
+        await this.guestsRepository.save(g);
+      }
+
+      const oldSocorro = await this.guestsRepository.find({
+        where: [
+          { name: 'Tia Socorro e Danielle' },
+          { name: 'Tia Socorro e Daniele' },
+          { firstname: 'Tia Socorro e Danielle' },
+          { firstname: 'Tia Socorro e Daniele' },
+        ],
+      });
+      for (const g of oldSocorro) {
+        g.name = 'Tia Socorro e família';
+        g.firstname = 'Tia Socorro e família';
         await this.guestsRepository.save(g);
       }
 
