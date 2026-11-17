@@ -72,7 +72,8 @@ export class GiftsService implements OnModuleInit {
         { old: 'Secador de Louça', new: 'Escorredor de louça' },
         { old: 'Liquidificador ou Processador de Alimentos', new: 'Liquidificador 220v' },
         { old: 'Liquidificador', new: 'Liquidificador 220v' },
-        { old: 'Sanduicheira', new: 'Sanduicheira 220v' }
+        { old: 'Sanduicheira', new: 'Sanduicheira 220v' },
+        { old: 'Organizador Giratório de Temperos 360°', new: 'Porta Temperos Giratório 360°' }
       ];
       for (const rename of renames) {
         const oldGifts = await this.giftsRepository.findBy({ name: rename.old });
@@ -143,7 +144,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Gelagua ou Bebedouro',
         description: 'Gelagua para termos água gelada sempre à disposição.',
-        price: 472.50,
+        price: 600.00,
         image_url: '/Lista-presentes/gelagua.png',
       },
       {
@@ -299,7 +300,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Mop Giratório Esfregão Cesto Inox',
         description: 'Mop giratório com esfregão e cesto em aço inox para limpeza prática.',
-        price: 73.50,
+        price: 130.00,
         image_url: '/Lista-presentes/mop_giratorio_inox.png',
       },
       {
@@ -345,10 +346,10 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/relogio_parede.png',
       },
       {
-        name: 'Organizador Giratório de Temperos 360°',
-        description: 'Organizador giratório 360 graus para temperos and condimentos na cozinha.',
-        price: 73.50,
-        image_url: '/Lista-presentes/organizador_temperos.png',
+        name: 'Porta Temperos Giratório 360°',
+        description: 'Organizador giratório 360 graus para temperos e condimentos na cozinha.',
+        price: 130.00,
+        image_url: '/Lista-presentes/porta_temperos_giratorio.jpg',
       },
       {
         name: 'Kit Bowls Tigelas de Inox com Tampa Plástica, 3 Unidades',
