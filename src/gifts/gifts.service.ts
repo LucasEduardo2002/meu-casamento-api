@@ -72,7 +72,6 @@ export class GiftsService implements OnModuleInit {
         { old: 'Liquidificador ou Processador de Alimentos', new: 'Liquidificador 220v' },
         { old: 'Liquidificador', new: 'Liquidificador 220v' },
         { old: 'Sanduicheira', new: 'Sanduicheira 220v' },
-        { old: 'Organizador Giratório de Temperos 360°', new: 'Porta Temperos Giratório 360°' },
         { old: 'Jogo de Assadeiras e Travessas', new: 'Jogo Assadeiras 3 Peças Antiaderente' }
       ];
       for (const rename of renames) {
@@ -340,10 +339,10 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/relogio_parede.png',
       },
       {
-        name: 'Porta Temperos Giratório 360°',
-        description: 'Organizador giratório 360 graus para temperos e condimentos na cozinha.',
-        price: 130.00,
-        image_url: '/Lista-presentes/porta_temperos_giratorio.jpg',
+        name: 'Tapete para Sala 2 x 2,5',
+        description: 'Tapete para sala elegante e confortável no tamanho 2,00m x 2,50m.',
+        price: 180.00,
+        image_url: '/Lista-presentes/tapete_sala.png',
       },
       {
         name: 'Kit Bowls Tigelas de Inox com Tampa Plástica, 3 Unidades',
@@ -411,7 +410,11 @@ export class GiftsService implements OnModuleInit {
         'Tábua de Corte de Bambu',
         'Tábua de Carne',
         'tábua de carne',
-        'Tábua de Corte'
+        'Tábua de Corte',
+        'Porta Temperos Giratório 360°',
+        'Porta Temperos Giratório 360',
+        'Organizador Giratório de Temperos 360°',
+        'Organizador Giratório de Temperos'
       ];
       for (const itemName of itemsToDelete) {
         const toDeleteList = await this.giftsRepository.findBy({ name: itemName });
@@ -428,7 +431,8 @@ export class GiftsService implements OnModuleInit {
         const isSilicone = norm.includes('silicone');
         const isTabuaCarne = norm.includes('tabua') && (norm.includes('carne') || norm.includes('corte') || norm.includes('bambu'));
         const isFormas = norm.includes('formas') && (norm.includes('bolo') || norm.includes('torta'));
-        if (isGarrafa || isSilicone || isTabuaCarne || isFormas) {
+        const isPortaTemperos = norm.includes('tempero') || norm.includes('organizador giratorio');
+        if (isGarrafa || isSilicone || isTabuaCarne || isFormas || isPortaTemperos) {
           await this.giftsRepository.remove(g);
         }
       }
@@ -496,7 +500,8 @@ export class GiftsService implements OnModuleInit {
       const isSilicone = norm.includes('silicone');
       const isTabuaCarne = norm.includes('tabua') && (norm.includes('carne') || norm.includes('corte') || norm.includes('bambu'));
       const isFormas = norm.includes('formas') && (norm.includes('bolo') || norm.includes('torta'));
-      return !isGarrafa && !isSilicone && !isTabuaCarne && !isFormas;
+      const isPortaTemperos = norm.includes('tempero') || norm.includes('organizador giratorio');
+      return !isGarrafa && !isSilicone && !isTabuaCarne && !isFormas && !isPortaTemperos;
     });
   }
 
