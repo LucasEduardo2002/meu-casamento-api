@@ -11,16 +11,19 @@ const GIFT_LIMITS: Record<string, number | 'unlimited'> = {
   'Sanduicheira 220v': 2,
   'Airfryer 220v': 2,
   'Liquidificador 220v': 2,
+  'Faqueiro Inox 24 peças': 2,
   'Faqueiro Inox': 2,
   'Conjunto de Taças': 2,
   'Ventilador de Coluna': 3,
   'Conjunto de Copos': 3,
   'Conjunto de Potes para Mantimentos': 3,
   'Boleira de Vidro': 'unlimited',
+  'Kit Talheres Sobremesa Classic 36 Peças': 3,
   'Conjunto de Talheres de Sobremesa': 3,
   'Jogo de Lençol de Algodão Queen': 3,
   'Edredom Queen Cobre-Leito': 3,
   'Kit de Travesseiros Confort': 3,
+  'Protetor de Colchão Impermeável queen': 'unlimited',
   'Protetor de Colchão Impermeável': 'unlimited',
   'Jogo de Toalhas de Banho': 3,
   'Toalhas de Mesa e Jogo Americano': 2,
@@ -72,7 +75,12 @@ export class GiftsService implements OnModuleInit {
         { old: 'Liquidificador ou Processador de Alimentos', new: 'Liquidificador 220v' },
         { old: 'Liquidificador', new: 'Liquidificador 220v' },
         { old: 'Sanduicheira', new: 'Sanduicheira 220v' },
-        { old: 'Jogo de Assadeiras e Travessas', new: 'Jogo Assadeiras 3 Peças Antiaderente' }
+        { old: 'Jogo de Assadeiras e Travessas', new: 'Jogo Assadeiras 3 Peças Antiaderente' },
+        { old: 'Conjunto de Talheres de Sobremesa', new: 'Kit Talheres Sobremesa Classic 36 Peças' },
+        { old: 'Faqueiro Inox', new: 'Faqueiro Inox 24 peças' },
+        { old: 'Lixeira de Inox (Cozinha/Banheiro)', new: 'Lixeira de Inox 12L com pedal' },
+        { old: 'Lixeira de Inox 12Lcom pedal', new: 'Lixeira de Inox 12L com pedal' },
+        { old: 'Protetor de Colchão Impermeável', new: 'Protetor de Colchão Impermeável queen' }
       ];
       for (const rename of renames) {
         const oldGifts = await this.giftsRepository.findBy({ name: rename.old });
@@ -107,7 +115,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Liquidificador 220v',
         description: 'Para preparar sucos, vitaminas e receitas.',
-        price: 105.00,
+        price: 140.00,
         image_url: '/Lista-presentes/liquidificador.webp',
       },
       {
@@ -117,7 +125,7 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/jogo_de_tacas.webp',
       },
       {
-        name: 'Faqueiro Inox',
+        name: 'Faqueiro Inox 24 peças',
         description: 'Conjunto de talheres em aço inox.',
         price: 84.00,
         image_url: '/Lista-presentes/talheres.jpg',
@@ -149,7 +157,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Ventilador de Coluna',
         description: 'Ventilador para os dias quentes.',
-        price: 189.00,
+        price: 250.00,
         image_url: '/Lista-presentes/ventilador.png',
       },
       {
@@ -179,7 +187,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Escorredor de louça',
         description: 'Escorredor de louças para a cozinha.',
-        price: 115.50,
+        price: 130.00,
         image_url: '/Lista-presentes/escorredor_louca.png',
       },
       {
@@ -189,21 +197,21 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/boleira_vidro.png',
       },
       {
-        name: 'Conjunto de Talheres de Sobremesa',
+        name: 'Kit Talheres Sobremesa Classic 36 Peças',
         description: 'Talheres pequenos para servir sobremesas.',
-        price: 63.00,
+        price: 116.00,
         image_url: '/Lista-presentes/talheres_sobremesa.png',
       },
       {
         name: 'Jogo de Lençol de Algodão Queen',
         description: 'Jogo de lençol queen de algodão.',
-        price: 262.50,
+        price: 200.00,
         image_url: '/Lista-presentes/lencol_queen.png',
       },
       {
         name: 'Edredom Queen Cobre-Leito',
         description: 'Edredom queen confortável.',
-        price: 336.00,
+        price: 250.00,
         image_url: '/Lista-presentes/edredom_queen.png',
       },
       {
@@ -213,7 +221,7 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/travesseiros.png',
       },
       {
-        name: 'Protetor de Colchão Impermeável',
+        name: 'Protetor de Colchão Impermeável queen',
         description: 'Protetor impermeável para colchão queen.',
         price: 115.50,
         image_url: '/Lista-presentes/protetor_colchao.png',
@@ -231,9 +239,9 @@ export class GiftsService implements OnModuleInit {
         image_url: '/Lista-presentes/toalhas_mesa.png',
       },
       {
-        name: 'Lixeira de Inox (Cozinha/Banheiro)',
+        name: 'Lixeira de Inox 12L com pedal',
         description: 'Lixeira de inox com pedal.',
-        price: 94.50,
+        price: 130.00,
         image_url: 'https://plus.unsplash.com/premium_photo-1664189121552-f6d1dbf2a45c?q=80&w=300&auto=format&fit=crop',
       },
       {
@@ -251,7 +259,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Fruteira de Mesa',
         description: 'Fruteira para mesa.',
-        price: 115.50,
+        price: 80.00,
         image_url: 'https://images.unsplash.com/photo-1605280179505-db8b72e318b7?q=80&w=300&auto=format&fit=crop',
       },
       {
@@ -269,7 +277,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Panela de Pressão Cerâmica',
         description: 'Panela de pressão com revestimento cerâmico, segura e eficiente.',
-        price: 262.50,
+        price: 230.00,
         image_url: '/Lista-presentes/panela_pressao_ceramica.png',
       },
       {
@@ -287,7 +295,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Jogo Com 6 Taças De Sobremesa Diamante',
         description: 'Conjunto com 6 taças de vidro estilo diamante para sobremesa.',
-        price: 63.00,
+        price: 70.00,
         image_url: '/Lista-presentes/tacas_sobremesa_diamante.png',
       },
       {
@@ -311,7 +319,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Kit 2 Mantas Para Sofá',
         description: 'Conjunto com 2 mantas aconchegantes e decorativas para sofá.',
-        price: 63.00,
+        price: 80.00,
         image_url: '/Lista-presentes/kit_mantas_sofa.png',
       },
       {
@@ -329,7 +337,7 @@ export class GiftsService implements OnModuleInit {
       {
         name: 'Frigideira Cerâmica Antiaderente',
         description: 'Frigideira com revestimento cerâmico antiaderente para grelhar com facilidade.',
-        price: 84.00,
+        price: 100.00,
         image_url: '/Lista-presentes/frigideira_ceramica.png',
       },
       {
